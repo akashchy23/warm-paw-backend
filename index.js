@@ -41,6 +41,18 @@ async function run() {
             res.send(data)
         })
 
+        //   Get from DB
+        app.get('/services', async (req, res) => {
+            const { category } = req.query;
+            console.log(category)
+            const query = {};
+            if (category) {
+                query.category = category;
+
+            }
+            const result = await petservices.find(query).toArray();
+            res.send(result)
+        })
         
 
         await client.db("admin").command({ ping: 1 });
