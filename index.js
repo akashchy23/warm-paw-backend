@@ -30,7 +30,16 @@ async function run() {
         const database = client.db('petService')
         const petservices = database.collection('services')
         const orderCollection = database.collection('orders')
-      
+        //    post to DB
+        app.post('/services', async (req, res) => {
+            const data = req.body;
+            const date = new Date();
+            data.createAt = date;
+            console.log(data)
+
+            const result = await petservices.insertOne(data)
+            res.send(data)
+        })
 
         
 
