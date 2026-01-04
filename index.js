@@ -28,8 +28,29 @@ async function run() {
         // await client.connect();
 
         const database = client.db('petService')
+        const users = database.collection('users')
         const petservices = database.collection('services')
         const orderCollection = database.collection('orders')
+        // post user to DB
+        app.post('/users', async (req, res) => {
+            const user = req.body
+            const date = new Date()
+            user.createAt = date
+            const result = await users.insertOne(user)
+            res.send(result)
+        })
+
+        // get user for admin from db
+        app.get('/users', async (req, res) => {
+            const result = await users.find().toArray()
+            res.status(200).send(result)
+        })
+        app.get('/users/:email', async (req, res) => {
+            const { email } = req.params
+            const query = { email: email }
+            const result = await users.findOne(query)
+            res.send(result)
+        })
         //    post to DB
         app.post('/services', async (req, res) => {
             const data = req.body;
